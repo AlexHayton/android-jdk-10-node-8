@@ -105,7 +105,7 @@ RUN sudo apt-get update -qqy && sudo apt-get install -qqy \
         lsb-release
 
 RUN sudo apt-get install gcc-multilib && \
-    sudo easy_install -U pip && \
+    sudo python /usr/lib/python2.7/dist-packages/easy_install.py -U pip && \
     sudo pip uninstall crcmod && \
     sudo pip install -U crcmod
 
