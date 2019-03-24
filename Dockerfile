@@ -3,7 +3,7 @@
 #
 FROM openjdk:10-jdk-slim
 
-LABEL maintainer="marc@circleci.com"
+LABEL maintainer="alex.hayton@hostmaker.co"
 
 # Initial Command run as `root`.
 
@@ -194,7 +194,7 @@ USER root
 RUN groupadd --gid 1000 node \
   && useradd --uid 1000 --gid node --shell /bin/bash --create-home node
 
-ENV NODE_VERSION 10.15.3
+ENV NODE_VERSION 8.15.1
 
 RUN ARCH= && dpkgArch="$(dpkg --print-architecture)" \
   && case "${dpkgArch##*-}" in \
@@ -252,8 +252,13 @@ RUN set -ex \
   && ln -s /opt/yarn-v$YARN_VERSION/bin/yarnpkg /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
 
+RUN gem install fastlane -NV
+
+RUN apt-get install -y locales locales-all
+ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 # Basic smoke test
 RUN node --version
+RUN fastlane --version
 
 USER circleci
